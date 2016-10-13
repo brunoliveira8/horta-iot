@@ -3,8 +3,15 @@
 
 {% block content %}   
 
-<h1>Hey there!</h1>
-	
+{% verbatim  %}
+<div ng-app='app' ng-controller="appCtrl">
+	<div class="jumbotron">
+		<h1>Theme example</h1>
+		<p>{{text}}</p>
+	</div>
+</div>
+{% endverbatim  %}
+
 {% endblock %}
 
 {% block extra_javascript %}
