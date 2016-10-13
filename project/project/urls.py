@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^app/', include('app.urls')),
+    url(r'^$', include('app.urls')),
     url(r'accounts/register/$', RegistrationView.as_view(form_class = RegistrationForm), name = 'registration_register'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
 )
