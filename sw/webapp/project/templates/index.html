@@ -1,18 +1,64 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
-{% block content %}   
-
-{% verbatim  %}
-<div ng-app='app' ng-controller="appCtrl">
-	<div class="jumbotron">
-		<h1>Theme example</h1>
-		<p>{{text}}</p>
-	</div>
+{% block content %}
+    {% verbatim  %}
+    <div ng-app='app' ng-controller="appCtrl">
+        <div class='row'>
+            <div class='col-md-8 col-md-offset'>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Dados Sensoriados</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table text-center">
+                            <thead >
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center">Umidade do Solo</th>
+                                    <th class="text-center">Umidade do Ar</th>
+                                    <th class="text-center">Temperatura</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-left"><b>Última Aquisição</b></td>
+                                    <td>{{ultima_medida.umidade_solo}}%</td>
+                                    <td>{{ultima_medida.umidade_ar}}%</td>
+                                    <td>{{ultima_medida.temperatura}} C</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left"><b>Média das medidas</b></td>
+                                    <td>{{media_medidas.umidade_solo__avg}}%</td>
+                                    <td>{{media_medidas.umidade_ar__avg}}%</td>
+                                    <td>{{media_medidas.temperatura__avg}} C</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-right">
+                            <h5> Atualizado às {{ultima_medida.timestamp | date:'H:m:s dd/MM/yyyy'}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4'>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Status da Torneira</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h3><span class="label label-success">Ligada</span></h3>
+                        </div>
+                        <div class="text-center" style="margin-top: 20px;">
+                            <h5>A última irrigação durou 70 minutos.</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endverbatim  %}
-
 {% endblock %}
-
 {% block extra_javascript %}
 {% endblock %}

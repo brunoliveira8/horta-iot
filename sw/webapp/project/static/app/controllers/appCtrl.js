@@ -1,7 +1,28 @@
 'use strict';
 angular.module('app')
-  .controller('appCtrl', function ($scope, $http) {
+  .controller('appCtrl', function ($scope, $http, $interval) {
 
-    $scope.text = "This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it."
+    $http.get("/ultima_medida/")
+    .then(function(response) {
+        $scope.ultima_medida = response.data;
+    });
+
+    $http.get("/media_medidas/")
+    .then(function(response) {
+        $scope.media_medidas = response.data;
+    });
+
+    var interval = $interval(function() {
+            $http.get("/ultima_medida/")
+                .then(function(response) {
+                    $scope.ultima_medida = response.data;
+            });
+
+            $http.get("/media_medidas/")
+            .then(function(response) {
+                $scope.media_medidas = response.data;
+            });
+
+          }, 1000);
 
 });
