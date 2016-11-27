@@ -4,14 +4,17 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 # Create your models here.
+
+
 class Dados(models.Model):
     umidade_solo = models.DecimalField(max_digits=5, decimal_places=2)
     umidade_ar = models.DecimalField(max_digits=5, decimal_places=2)
     temperatura = models.DecimalField(max_digits=5, decimal_places=2)
     criado_em = models.DateTimeField(default=datetime.now)
 
-    def __unicode__(self):      #For Python 2, use __str__ on Python 3
+    def __unicode__(self):  # For Python 2, use __str__ on Python 3
         return 'id: {}'.format(self.pk)
+
 
 class Atuador(models.Model):
     status = models.BooleanField(default=False)
