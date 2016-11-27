@@ -7,4 +7,5 @@ urlpatterns = patterns('',
         url(r'^ultima_medida/', views.ultima_medida, name='ultima_medida'),
         url(r'^media_medidas/', views.media_medidas, name='media_medidas'),
         url(r'^status_atuador/', views.status_atuador, name='status_atuador'),
+        url(r'^configurar/', views.ConfiguracaoView.as_view(), name='configurar'),
         )

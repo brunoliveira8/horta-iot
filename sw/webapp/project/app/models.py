@@ -20,6 +20,11 @@ class Atuador(models.Model):
     status = models.BooleanField(default=False)
     criado_em = models.DateTimeField(default=datetime.now)
 
+class Configuracao(models.Model):
+    teto = models.IntegerField(null=True, blank=True)
+    piso = models.IntegerField(null=True, blank=True)
+    intervalo = models.IntegerField(null=True, blank=True)
+
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)

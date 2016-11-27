@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from .models import Dados, Atuador
+from .models import Dados, Atuador, Configuracao
 from django.db.models import Avg
+from django.views.generic import View
+from .forms import ConfiguracaoForm
 import serial
 
 
@@ -37,7 +39,7 @@ def media_medidas(request):
 
 def status_atuador(request):
 
-    st1, st2, st3 = Atuador.objects.order_by('-criado_em')[1:4]
+    st1, st2, st3 = Atuador.objects.order_by('-criado_em')[:3]
 
     if st1.status is False:
         duracao_total = st1.criado_em-st2.criado_em
@@ -52,6 +54,47 @@ def status_atuador(request):
     return JsonResponse(
        {'duracao': duracao_min, 'status': st1.status, 'timestamp': st1.criado_em},
     )
+
+
+class ConfiguracaoView(View):
+
+    def get(self, request):
+        context_dict = dict()
+        try:
+            old_config = Configuracao.objects.get(pk=0)
+            form = ConfiguracaoForm(instance=old_config)
+        except:
+            form = ConfiguracaoForm()
+
+        context_dict['form'] = form
+        return render(request, 'configurar.html', context_dict)
+
+    def post(self, request):
+        context_dict = dict()
+        form = ConfiguracaoForm(request.POST)
+
+        context_dict['form'] = form
+
+        if form.is_valid():
+            # Save the new category to the database.
+            new_config = form.save(commit=False)
+            config = Configuracao.objects.update_or_create(
+                pk=0,
+                defaults = {
+                    'teto': new_config.teto,
+                    'piso': new_config.piso,
+                    'intervalo': new_config.intervalo
+                }
+            )
+
+            # ser = serial.Serial('/dev/cu.usbserial-AM01P57B')
+            # dados = "{0};{1};{2}".format(new_config.teto, new_config.piso, intervalo)
+            # ser.write(bytes(dados))
+
+            return render(request, 'success.html', context_dict)
+
+        return render(request, 'configurar.html', context_dict)
+
 
 
 
