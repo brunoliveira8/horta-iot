@@ -5,9 +5,12 @@ from .models import Dados, Atuador, Configuracao
 from django.db.models import Avg
 from django.views.generic import View
 from .forms import ConfiguracaoForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 import serial
 
 
+@login_required(login_url='/accounts/login/')
 def index(request):
     return render(request, 'index.html')
 
@@ -20,6 +23,7 @@ def umidade(request, valor):
     return HttpResponse('Informação enviada')
 
 
+@login_required(login_url='/accounts/login/')
 def ultima_medida(request):
     dado = Dados.objects.latest('id')
     return JsonResponse({
@@ -31,28 +35,32 @@ def ultima_medida(request):
     })
 
 
+@login_required(login_url='/accounts/login/')
 def media_medidas(request):
     n_medidas = 10
     return JsonResponse(
-        Dados.objects.order_by('-criado_em')[:n_medidas].aggregate(Avg('umidade_solo'), Avg('umidade_ar'), Avg('temperatura')),
+        Dados.objects.order_by('-criado_em')[:n_medidas].aggregate(
+            Avg('umidade_solo'), Avg('umidade_ar'), Avg('temperatura')),
     )
 
+
+@login_required(login_url='/accounts/login/')
 def status_atuador(request):
 
     st1, st2, st3 = Atuador.objects.order_by('-criado_em')[:3]
 
     if st1.status is False:
-        duracao_total = st1.criado_em-st2.criado_em
+        duracao_total = st1.criado_em - st2.criado_em
         h, mn, s = str(duracao_total).split(':')
-        duracao_min = int(h)*60+int(mn)+float(s)/60
+        duracao_min = int(h) * 60 + int(mn) + float(s) / 60
 
     elif st1.status is True:
-        duracao_total = st2.criado_em-st3.criado_em
+        duracao_total = st2.criado_em - st3.criado_em
         h, mn, s = str(duracao_total).split(':')
-        duracao_min = int(h)*60+int(mn)+float(s)/60
+        duracao_min = int(h) * 60 + int(mn) + float(s) / 60
 
     return JsonResponse(
-       {'duracao': duracao_min, 'status': st1.status, 'timestamp': st1.criado_em},
+        {'duracao': duracao_min, 'status': st1.status, 'timestamp': st1.criado_em},
     )
 
 
@@ -80,7 +88,7 @@ class ConfiguracaoView(View):
             new_config = form.save(commit=False)
             config = Configuracao.objects.update_or_create(
                 pk=0,
-                defaults = {
+                defaults={
                     'teto': new_config.teto,
                     'piso': new_config.piso,
                     'intervalo': new_config.intervalo
@@ -95,6 +103,6 @@ class ConfiguracaoView(View):
 
         return render(request, 'configurar.html', context_dict)
 
-
-
-
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ConfiguracaoView, self).dispatch(*args, **kwargs)
