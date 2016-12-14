@@ -13,7 +13,7 @@ from app.models import Dados, Atuador
 
 
 def read_serial():
-    ser = serial.Serial('/dev/cu.usbserial-AM01P57B')
+    ser = serial.Serial('/dev/ttyUSB0')
 
     while True:
         # ler
@@ -36,7 +36,7 @@ def read_serial():
 
 
 def write_serial():
-    ser = serial.Serial('/dev/cu.usbserial-AM01P57B')
+    ser = serial.Serial('/dev/ttyUSB0')
 
     while True:
         ser.write(b'70;12;1')
