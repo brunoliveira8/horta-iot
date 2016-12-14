@@ -51,7 +51,7 @@
                         </div>
                         <div class="text-center" style="margin-top: 20px;">
                             <div class="alert alert-info" role="alert">
-                                A última irrigação durou  <strong>{{ atuador.duracao}}</strong> minutos.
+                                A última irrigação durou  <strong>{{ atuador.duracao | number:2}}</strong> minutos.
                             </div>
                             <div class="text-right">
                                 <h5> Atualizado às {{atuador.timestamp | date:'H:m:s dd/MM/yyyy'}}</h5>
