@@ -95,9 +95,9 @@ class ConfiguracaoView(View):
                 }
             )
 
-             ser = serial.Serial('/dev/ttyUSB0')
-             dados = "{0};{1};{2}".format(new_config.teto, new_config.piso, intervalo)
-             ser.write(bytes(dados))
+            ser = serial.Serial('/dev/ttyUSB0')
+            dados = "{0};{1};{2}".format(new_config.teto, new_config.piso, intervalo)
+            ser.write(bytes(dados))
 
             return render(request, 'success.html', context_dict)
 
